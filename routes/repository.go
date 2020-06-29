@@ -7,6 +7,7 @@ import (
 	_ "github.com/mattn/go-oci8"
 )
 
+// Patients table definition, same as SQL
 type Patients struct {
 	ID         int
 	PatientID  string
@@ -26,6 +27,7 @@ type Patients struct {
 	Diffdays   sql.NullInt32
 }
 
+// Events table definition, same as SQL
 type Events struct {
 	ID         int
 	HospitalID int
@@ -44,6 +46,7 @@ type Events struct {
 	Diffdays   sql.NullInt32
 }
 
+// Hospitals table definition, same as SQL
 type Hospitals struct {
 	ID          int
 	HospitalID  int

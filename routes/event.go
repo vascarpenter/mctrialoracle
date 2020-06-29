@@ -97,7 +97,7 @@ func EventRouterPost(c echo.Context) error {
 	}
 
 	tx, err := db.BeginTx(ctx, nil)
-	_, err = tx.Exec(`INSERT INTO event (hospital_id,serialid,eventid,"DATE",alive,dropout,macce,bh,bw,sbp,dbp,hr,event)
+	if _, err = tx.Exec(`INSERT INTO event (hospital_id,serialid,eventid,"DATE",alive,dropout,macce,bh,bw,sbp,dbp,hr,event)
 	  VALUES (:1,:2,:3,TO_DATE(:4, 'YYYY/MM/DD'),:5,:6,:7,:8,:9,:10,:11,:12,:13)`,
 		hospid,                           // 1: hospital_id
 		serInt,                           // 2: serialid
@@ -112,7 +112,9 @@ func EventRouterPost(c echo.Context) error {
 		dbp,                              // 11: dbp
 		hr,                               // 12: hr
 		c.FormValue("eventtext"),         // 13: event
-	)
+	); err != nil {
+		panic(err)
+	}
 	if err := tx.Commit(); err != nil {
 		panic(err)
 	}

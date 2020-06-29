@@ -35,7 +35,8 @@ func EventlistRouter(c echo.Context) error {
 		return c.Redirect(http.StatusFound, "/logout")
 	}
 
-	rows2, err := db.QueryContext(ctx,
+	var p Patients
+	if err := db.QueryRowContext(ctx,
 		`SELECT PATIENT_ID,HOSPITAL_ID,SERIALID,TRIALGROUP,"INITIAL",
 		TO_CHAR(BIRTHDATE,'YYYY/MM/DD'),FEMALE,AGE, 
 		TO_CHAR(ALLOWDATE,'YYYY/MM/DD'), 
@@ -44,24 +45,18 @@ func EventlistRouter(c echo.Context) error {
 		TO_CHAR(MACCEDATE,'YYYY/MM/DD'), 
 		TO_CHAR(DEADDATE,'YYYY/MM/DD'), 
 		TO_CHAR(FINISHDATE,'YYYY/MM/DD'), 
-		DIFFDAYS FROM PATIENTS WHERE hospital_id = :1 AND serialid = :2`, hosp, ser)
-
-	var p Patients
-	for rows2.Next() {
-		if err := rows2.Scan(&p.PatientID, &p.HospitalID, &p.SerialID,
-			&p.Trialgroup, &p.Initial,
-			&p.Birthdate, &p.Female, &p.Age,
-			&p.Allowdate, &p.Startdate, &p.Allowdate, &p.Maccedate,
-			&p.Deaddate, &p.Finishdate, &p.Diffdays); err != nil {
-			panic(err)
-		}
-		// get first line and quit
-		break
+		DIFFDAYS FROM PATIENTS WHERE hospital_id = :1 AND serialid = :2`, hosp, ser).Scan(
+		&p.PatientID, &p.HospitalID, &p.SerialID,
+		&p.Trialgroup, &p.Initial,
+		&p.Birthdate, &p.Female, &p.Age,
+		&p.Allowdate, &p.Startdate, &p.Allowdate, &p.Maccedate,
+		&p.Deaddate, &p.Finishdate, &p.Diffdays); err != nil {
+		panic(err)
 	}
-	rows2.Close()
+	// get first line and quit
 	//fmt.Printf("%+v\n", p)
 
-	rows2, _ = db.QueryContext(ctx,
+	rows2, _ := db.QueryContext(ctx,
 		`SELECT HOSPITAL_ID,SERIALID,EVENTID,
 			TO_CHAR("DATE",'YYYY/MM/DD'),
 			ALIVE, DROPOUT, MACCE, BH, BW, SBP, DBP, HR, EVENT,
@@ -89,12 +84,12 @@ func EventlistRouter(c echo.Context) error {
 		loc, _ := time.LoadLocation("Asia/Tokyo")
 		stdate, _ := time.ParseInLocation("2006/01/02", p.Startdate.String, loc)
 		diff := time.Now().Sub(stdate).Hours() / 24
-		p.Diffdays = sql.NullInt32{int32(diff), true}
+		p.Diffdays = sql.NullInt32{Int32: int32(diff), Valid: true}
 		for ind, e := range s {
 			if e.Date.Valid {
 				evdate, _ := time.ParseInLocation("2006/01/02", e.Date.String, loc)
 				diff := evdate.Sub(stdate).Hours() / 24
-				s[ind].Diffdays = sql.NullInt32{int32(diff), true} // eを編集しても反映されない
+				s[ind].Diffdays = sql.NullInt32{Int32: int32(diff), Valid: true} // eを編集しても反映されない
 				//fmt.Printf("%+v\n", s[ind])
 			}
 		}

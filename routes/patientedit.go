@@ -94,7 +94,8 @@ func PatientEditRouterPost(c echo.Context) error {
 	trialgroup, err := strconv.Atoi(c.FormValue("trialgroup"))
 
 	tx, _ := db.BeginTx(ctx, nil)
-	if _, err := tx.Exec(`UPDATE patients SET PATIENT_ID=:1,TRIALGROUP=:2,"INITIAL"=:3,
+	if _, err := tx.Exec(`UPDATE patients
+	SET PATIENT_ID=:1,TRIALGROUP=:2,"INITIAL"=:3,
 		BIRTHDATE=TO_DATE(:4,'YYYY-MM-DD'),FEMALE=:5,AGE=:6,
 		ALLOWDATE=TO_DATE(:7,'YYYY-MM-DD'),
 		STARTDATE=TO_DATE(:8,'YYYY-MM-DD')

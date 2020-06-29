@@ -72,7 +72,7 @@ func IndexRouter(c echo.Context) error {
 			t, _ := time.ParseInLocation("2006/01/02", s[i].Startdate.String, loc)
 
 			diff := time.Now().Sub(t).Hours() / 24
-			s[i].Diffdays = sql.NullInt32{int32(diff), true}
+			s[i].Diffdays = sql.NullInt32{Int32: int32(diff), Valid: true}
 		}
 	}
 
