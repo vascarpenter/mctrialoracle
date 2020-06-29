@@ -59,19 +59,20 @@ func PatientRouterPost(c echo.Context) error {
 	}
 
 	tx, _ := db.BeginTx(ctx, nil)
-	if _, err := tx.Exec(`INSERT INTO patients (PATIENT_ID,HOSPITAL_ID,SERIALID,TRIALGROUP,"INITIAL",BIRTHDATE,FEMALE,AGE,ALLOWDATE,STARTDATE)
-		VALUES (:1,:2,:3,:4,:5,TO_DATE(:6,'YYYY-MM-DD'),:7,:8,
-		TO_DATE(:9,'YYYY-MM-DD'),TO_DATE(:10,'YYYY-MM-DD') )`,
-		c.FormValue("patientid"),  // 1: PATIENT_ID
-		hospid,                    // 2: HOSPITAL_ID
-		count+1,                   // 3: SERIALID
-		c.FormValue("trialgroup"), // 4: TRIALGROUP
-		c.FormValue("initial"),    // 5: INITIAL
-		c.FormValue("birth"),      // 6: BIRTHDATE
-		female,                    // 7: FEMALE
-		years,                     // 8: AGE
-		c.FormValue("allowdate"),  // 9: ALLOWDATE
-		c.FormValue("startdate"),  // 10: STARTDATE
+	if _, err := tx.Exec(`INSERT INTO patients (ID,PATIENT_ID,HOSPITAL_ID,SERIALID,TRIALGROUP,"INITIAL",BIRTHDATE,FEMALE,AGE,ALLOWDATE,STARTDATE)
+		VALUES (:1,:2,:3,:4,:5,:6,TO_DATE(:7,'YYYY-MM-DD'),:8,:9,
+		TO_DATE(:10,'YYYY-MM-DD'),TO_DATE(:11,'YYYY-MM-DD') )`,
+		count+1,                   // 1: ID
+		c.FormValue("patientid"),  // 2: PATIENT_ID
+		hospid,                    // 3: HOSPITAL_ID
+		count+1,                   // 4: SERIALID
+		c.FormValue("trialgroup"), // 5: TRIALGROUP
+		c.FormValue("initial"),    // 6: INITIAL
+		c.FormValue("birth"),      // 7: BIRTHDATE
+		female,                    // 8: FEMALE
+		years,                     // 9: AGE
+		c.FormValue("allowdate"),  // 10: ALLOWDATE
+		c.FormValue("startdate"),  // 11: STARTDATE
 	); err != nil {
 		panic(err)
 	}

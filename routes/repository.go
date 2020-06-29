@@ -2,6 +2,8 @@ package routes
 
 import (
 	"database/sql"
+	"fmt"
+	"os"
 	"time"
 
 	_ "github.com/mattn/go-oci8"
@@ -70,7 +72,7 @@ func Repository() *sql.DB {
 			mysqluser = "oge"
 		}
 		if mysqlpass = os.Getenv("MYSQL_PASSWORD"); mysqlpass == "" {
-			mysqlpass = "hogehogeA00"
+			mysqlpass = "12345678"
 		}
 		if mysqldb = os.Getenv("MYSQL_DATABASE"); mysqldb == "" {
 			mysqldb = "studydb"
@@ -80,7 +82,13 @@ func Repository() *sql.DB {
 	*/
 	// oracle version
 
-	db, err := sql.Open("oci8", "admin/GIF57259mcemlpm0@gikohadb_tp")
+	var ocistring string
+	if ocistring = os.Getenv("OCISTRING"); ocistring == "" {
+		fmt.Printf("OCI adapter string not specified in 'OCISTRING' environment variable. Program will quit")
+		os.Exit(1)
+	}
+
+	db, err := sql.Open("oci8", ocistring)
 
 	if err != nil {
 		panic(err)

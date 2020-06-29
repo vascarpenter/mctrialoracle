@@ -54,7 +54,7 @@ func IndexRouter(c echo.Context) error {
 		if err := rows2.Scan(&p.PatientID, &p.HospitalID, &p.SerialID,
 			&p.Trialgroup, &p.Initial,
 			&p.Birthdate, &p.Female, &p.Age,
-			&p.Allowdate, &p.Startdate, &p.Allowdate, &p.Maccedate,
+			&p.Allowdate, &p.Startdate, &p.Dropdate, &p.Maccedate,
 			&p.Deaddate, &p.Finishdate, &p.Diffdays); err != nil {
 			panic(err)
 		}
