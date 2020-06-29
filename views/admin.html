@@ -1,0 +1,23 @@
+{{define "admin"}}
+{{template "header_head" .}}
+<div id="portal-header">
+  <span class="login-user">{{.HospitalName}}さんとしてログインしています</span>&nbsp;
+  <button type="button" onclick="location.href='/logout'">ログアウト</button>&nbsp;
+  <button type="button" onclick="location.href='/resetpass'">パスワードの変更</button>
+</div>
+
+<div id="portal">
+    <ul class="main-list">
+      <p class="main-title">{{.Message}}</p>
+</div>
+<ul>
+{{.ImageTag|safehtml}}
+
+<p>
+<span id="progress"></span>
+</p>
+
+<button type="button" name="KMplot" class="submit" onclick="location.href='/admin/1'">現在の日付でのKM曲線を描く</button>
+</ul>
+{{template "footer"}}
+{{end}}

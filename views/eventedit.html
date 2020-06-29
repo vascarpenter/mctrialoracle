@@ -1,0 +1,57 @@
+{{define "eventedit"}}
+{{template "header" .}}
+{{template "jquery"}}
+<div id="portal-header">
+  <span class="login-user">{{.HospitalName}}さんとしてログインしています</span>&nbsp;
+  <button type="button" onclick="location.href='/logout'">ログアウト</button>&nbsp;
+  <button type="button" onclick="location.href='/resetpass'">パスワードの変更</button>
+</div>
+<div id="event">
+    <p class="main-title">{{.Title}}</p>
+    
+    <form action="/eventedit/{{.Event.HospitalID}}/{{.Event.Serialid}}/{{.Event.Eventid}}" method="post" class="board-form">
+        <span class="label">イベント月日</span><input type="date" name="date" class="input"  id="date" value="{{.Event.Date.Value.Format "2006-01-02"}}" required><br>
+        <br>
+        <span class="label">内容</span><input type="text" name="eventtext" class="input" value="{{.Event.Event.Value}}"><br>
+        <br>
+        <span class="label">生存</span>
+        <input id="alive" type="radio" class="radio-inline__input" name="alive" value="0"  {{if not .Event.Alive.Value}}checked{{end}}/>
+        <label for="alive" class="radio-inline__label" for="0" >死亡</label>
+        <input id="dead" type="radio" class="radio-inline__input" name="alive" value="1" {{if .Event.Alive.Value}}checked{{end}}/>
+        <label for="dead" class="radio-inline__label" for="1" >生存</label><br>
+        <br><br>
+        <span class="label">脱落</span>
+        <input id="dropout" type="radio" class="radio-inline__input" name="dropout" value="0"  {{if not .Event.Dropout.Value}}checked{{end}}/>
+        <label for="dropout" class="radio-inline__label" for="0" >いいえ</label>
+        <input id="dropout_" type="radio" class="radio-inline__input" name="dropout" value="1" {{if .Event.Dropout.Value}}checked{{end}}/>
+        <label for="dropout_" class="radio-inline__label" for="1" >はい</label><br>
+        <br><br>
+        <span class="label">重大イベント</span>
+        <input id="macce" type="radio" class="radio-inline__input" name="macce" value="0"  {{if not .Event.Macce.Value}}checked{{end}}/>
+        <label for="macce" class="radio-inline__label" for="0" >いいえ</label>
+        <input id="macce_" type="radio" class="radio-inline__input" name="macce" value="1" {{if .Event.Macce.Value}}checked{{end}}/>
+        <label for="macce_" class="radio-inline__label" for="1" >はい</label><br>
+        <br><br>
+        <span class="label">身長</span><input type="text" name="bh" class="input" value="{{.Event.BH.Value}}"><br>
+        <br>
+        <span class="label">体重</span><input type="text" name="bw" class="input" value="{{.Event.BW.Value}}"><br>
+        <br>
+        <span class="label">収縮期血圧</span><input type="text" name="sbp" class="input" value="{{.Event.SBP.Value}}"><br>
+        <br>
+        <span class="label">拡張期血圧</span><input type="text" name="dbp" class="input" value="{{.Event.DBP.Value}}"><br>
+        <br>
+        <span class="label">脈拍数</span><input type="text" name="hr" class="input" value="{{.Event.HR.Value}}"><br>
+        <br>
+        <script>
+          $(function() {
+            $.datepicker.setDefaults($.datepicker.regional["ja"]);
+            $("#date").datepicker({dateFormat:"yy-mm-dd"});
+          });
+        </script>
+        <button type="submit" class="submit">イベント編集内容を登録</button><br>
+    </form>
+    <button type='button' onclick="location.href='/eventlist/{{.Event.HospitalID}}/{{.Event.Serialid}}'">イベント一覧画面に戻る</button>
+
+</div>
+{{template "footer"}}
+{{end}}

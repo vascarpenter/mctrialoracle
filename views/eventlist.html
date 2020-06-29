@@ -1,0 +1,84 @@
+{{define "eventlist"}}
+{{template "header" .}}
+<div id="portal-header">
+  <span class="login-user">{{.HospitalName}}さんとしてログインしています</span>&nbsp;
+  <button type="button" onclick="location.href='/logout'">ログアウト</button>&nbsp;
+  <button type="button" onclick="location.href='/resetpass'">パスワードの変更</button>
+</div>
+<ul>
+  <table border=1>
+    <tr>
+      <th>患者#</th>
+      <th>施設ID</th>
+      <th>イニシャル</th>
+      <th>登録時年齢</th>
+      <th>性別</th>
+      <th>試験開始日</th>
+      <th>現在の経過日</th>
+    </tr>
+    <tr>
+        <td>{{.Person.SerialID}}</td>
+        <td>{{.Person.PatientID}}</td>
+        <td>{{.Person.Initial.String}}</td>
+        <td>{{.Person.Age.Int32}}</td>
+        <td>{{if ne .Person.Female.Int32 0 }}女{{else}}男{{end}}</td>
+        <td>{{.Person.Startdate.String}}</td>
+        <td>{{if .Person.Diffdays.Valid}}{{.Person.Diffdays.Int32}}日経過{{end}}</td>
+        </div>
+    </tr>
+  </table>
+  上記患者さんのイベントリスト
+
+</ul>
+<div id="portal">
+    <ul class="main-list">
+    <table border=1>
+    <tr>
+        <th>イベント月日</th>
+        <th>開始からの経過日</th>
+        <th>生存</th>
+        <th>脱落</th>
+        <th>重大イベント</th>
+        <th>身長</th>
+        <th>体重</th>
+        <th>SBP</th>
+        <th>DBP</th>
+        <th>HR</th>
+        <th>イベント内容</th>
+        <th>修正</th>
+    </tr>
+  {{range $i := .Events}}
+        <tr>
+
+            <td>{{$i.Date.String}}</td>
+            <td>{{if $i.Diffdays.Valid}}{{$i.Diffdays.Int32}}日経過{{end}}</td>
+            <td>{{if ne $i.Alive.Int32 0}}生存{{else}}死亡{{end}}</td>
+            <td>{{if ne $i.Dropout.Int32 0}}あり{{else}}なし{{end}}</td>
+            <td>{{if ne $i.Macce.Int32 0}}あり{{else}}なし{{end}}</td>
+            <td>{{$i.Bh.Int32}}</td>
+            <td>{{$i.Bw.Int32}}</td>
+            <td>{{$i.Sbp.Int32}}</td>
+            <td>{{$i.Dbp.Int32}}</td>
+            <td>{{$i.Hr.Int32}}</td>
+            <td>{{$i.Event.String}}</td>
+
+            <td>
+                <button type='button' onclick="location.href='/eventedit/{{$i.HospitalID}}/{{$i.SerialID}}/{{$i.EventID}}'">
+                編集</button>                      
+            </td>
+        </tr>
+    {{end}}
+
+    </table>
+    <br><br>
+    <button type="button" name="patient" class="submit" onclick="location.href='/event/{{.Person.HospitalID}}/{{.Person.SerialID}}'">新規イベント登録</button>
+  </ul>
+
+  <br><br>
+  <ul>
+    <button type="button" name="patient" class="submit" onclick="location.href='/'">患者一覧へ</button>
+  </ul>
+    
+</div>
+{{template "footer"}}
+{{end}}

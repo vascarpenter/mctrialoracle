@@ -1,0 +1,39 @@
+{{define "patientedit"}}
+{{template "header" .}}
+{{template "jquery"}}
+<div id="portal-header">
+  <span class="login-user">{{.HospitalName}}さんとしてログインしています</span>&nbsp;
+  <button type="button" onclick="location.href='/logout'">ログアウト</button>&nbsp;
+  <button type="button" onclick="location.href='/resetpass'">パスワードの変更</button>
+</div>
+<div id="register">
+    <p class="main-title">{{.Title}}</p>
+  
+        <form action="/patientedit/{{.Person.HospitalID}}/{{.Person.SerialID}}" method="post" class="board-form">
+        <span class="label">施設ID</span><input type="text" name="patientid" class="input" value="{{.Person.PatientID}}" required><br>
+        <span class="label">イニシャル</span><input type="text" name="initial" class="input" value="{{.Person.Initial.String}}" required><br>
+          <span class="label">生年月日</span><input type="date" name="birth" id="birth" class="input"  value="{{.Person.Birthdate.String}}" required><br>
+        <span class="label">性別</span>
+        <input id="male" type="radio" class="radio-inline__input" name="sex" value="0" {{ if eq .Person.Female.Int32 0 }}checked{{end}}/>
+        <label for="male" class="radio-inline__label" for="0" >男性</label>
+        <input id="female" type="radio" class="radio-inline__input" name="sex" value="1" {{ if ne .Person.Female.Int32 0 }}checked{{end}}/>
+        <label for="female" class="radio-inline__label" for="1" >女性</label><br>
+        <br><br>
+        <span class="label">治療グループ(数字)</span><input type="text" name="trialgroup" class="input" value="{{.Person.Trialgroup}}"><br>
+        <span class="label">同意取得日</span><input type="date" name="allowdate" id="allowdate" class="input"  value="{{.Person.Allowdate.String}}" required><br>
+        <span class="label">試験開始日</span><input type="date" name="startdate" id="startdate" class="input"  value="{{.Person.Startdate.String}}" required><br>
+       
+        <button type="submit" class="submit">編集項目の登録</button><br><br>
+        <button type="button" onclick="location.href='/'">病院ポータル画面に戻る</button>
+        <script>
+          $(function() {
+            $.datepicker.setDefaults($.datepicker.regional["ja"]);
+            $("#birth").datepicker({dateFormat:"yy-mm-dd"});
+            $("#allowdate").datepicker({dateFormat:"yy-mm-dd"});
+            $("#startdate").datepicker({dateFormat:"yy-mm-dd"});
+          });
+        </script>
+  </form>
+</div>
+{{template "footer"}}
+{{end}}
