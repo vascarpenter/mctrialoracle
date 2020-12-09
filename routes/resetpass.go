@@ -62,7 +62,7 @@ func ResetPassRouterPost(c echo.Context) error {
 	newpasscrypt, _ := bcrypt.GenerateFromPassword([]byte(newpass), 10)
 
 	tx, _ := db.BeginTx(ctx, nil)
-	if _, err := tx.Exec("UPDATE hospitals SET userpass = :1 WHERE hospital_id = :2", newpasscrypt, hospid); err != nil {
+	if _, err := tx.Exec("UPDATE hospitals SET userpass = :1 WHERE hospital_id = :2", string(newpasscrypt), hospid); err != nil {
 		panic(err)
 	}
 	if err := tx.Commit(); err != nil {

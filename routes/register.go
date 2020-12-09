@@ -65,7 +65,7 @@ func RegisterRouterPost(c echo.Context) error {
 		hospName,                       // 2: NAME
 		createdAt.Format("2006/01/02"), // 3: created_at
 		userid,                         // 4: userid
-		userpasscrypt,                  // 5: userpass
+		string(userpasscrypt),                  // 5: userpass
 		mailaddress,                    // 6: mailaddress
 	); err != nil {
 		panic(err)

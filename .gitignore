@@ -22,7 +22,7 @@ share/
 *.spf
 *.zip
 *.icloud
-m
+mctrialgo
 copy.sh
 
 # Linux

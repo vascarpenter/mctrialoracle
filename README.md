@@ -3,7 +3,7 @@
 ## 多施設共同研究用サーバーをgoで書いてみた の OCI 版
 
 - webフレームワークには echo
-- dbアクセスには go-oci8を使用
+- dbアクセスには godrorを使用
 - ORMの採用を中止 (sqlboilerはそもそもoracleに対応なし、あとバージョンがおかしいため..)
 
 ディレクトリ構造
@@ -17,10 +17,16 @@
 実行時にはstatic, viewsが必要
 ```
 
-実行
+ビルド
 ```
-環境変数の "OCISTRING" に 接続情報 例： admin/password@XXXXdb_tp をセットしておくこと。
-go run .
+go build -o mctrialgo
+```
+
+実行
+- 環境変数の "OCISTRING" に 接続情報をセットしておくこと。
+- 例： setenv OCISTRING admin/password@XXXXdb_tp
+```
+mctrialgo &
 ```
 
 サーバが起動している状態で、ブラウザで `http://127.0.0.1:3000/`　へアクセスしてみてください

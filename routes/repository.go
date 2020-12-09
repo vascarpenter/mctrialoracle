@@ -6,7 +6,8 @@ import (
 	"os"
 	"time"
 
-	_ "github.com/mattn/go-oci8"
+	// _ "github.com/mattn/go-oci8"
+	_ "github.com/godror/godror"
 )
 
 // Patients table definition, same as SQL
@@ -88,7 +89,7 @@ func Repository() *sql.DB {
 		os.Exit(1)
 	}
 
-	db, err := sql.Open("oci8", ocistring)
+	db, err := sql.Open("godror", ocistring)
 
 	if err != nil {
 		panic(err)
